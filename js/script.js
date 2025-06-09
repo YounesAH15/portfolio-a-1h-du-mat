@@ -70,10 +70,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
         
-        if (mobileMenu.classList.contains('active-mobile-menu')) {
-            mobileMenu.classList.add('hidden');
-            mobileMenu.classList.remove('active-mobile-menu');
-        }
+
     }
 
     navLinks.forEach(link => {
@@ -103,8 +100,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
     if (mobileMenuButton && mobileMenu) {
         mobileMenuButton.addEventListener('click', function() {
-            mobileMenu.classList.toggle('hidden');
-            mobileMenu.classList.toggle('active-mobile-menu');
+            if( mobileMenu.classList.contains('active-mobile-menu')) {
+                mobileMenu.classList.add('hidden');
+                mobileMenu.classList.remove('active-mobile-menu');
+            } else {
+                mobileMenu.classList.remove('hidden');
+                mobileMenu.classList.add('active-mobile-menu');
+            }
         });
     }
 

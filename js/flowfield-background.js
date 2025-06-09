@@ -105,7 +105,7 @@ const flowfieldSketch = (sketch) => {
         const spacing = sketch.width / density;
         for (let x = 0; x <= sketch.width; x += spacing) {
             for (let y = 0; y <= sketch.height; y += spacing) {
-                let p = sketch.createVector(x + sketch.random(-10, 10), y + random(-10, 10));
+                let p = sketch.createVector(x + sketch.random(-10, 10), y + sketch.random(-10, 10));
                 points.push(p);
             }
         }
