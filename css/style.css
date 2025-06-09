@@ -1,0 +1,181 @@
+/* css/style.css */
+
+body {
+    font-family: 'Inter', sans-serif;
+    /* The main background will be handled by the p5.js canvas */
+}
+
+#flowfield-background-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1; /* Ensure it's behind all other content */
+    overflow: hidden; /* Prevent scrollbars if canvas is slightly off */
+}
+
+#flowfield-background-container canvas {
+    display: block; /* Remove any default canvas spacing */
+    width: 100%;
+    height: 100%;
+}
+
+/* Ensure main content sections have a semi-transparent background to sit on top */
+.content-section {
+    @apply py-12 sm:py-16 px-2 sm:px-0;
+    /* Background applied directly in HTML for easier toggling with dark mode */
+    /* Example: bg-light-contrast/80 dark:bg-near-black/80 */
+    /* Ensure sections have a higher z-index if needed, though main content should be on top by default */
+    position: relative; /* Needed for z-index to work if header/footer are also positioned */
+    z-index: 1;
+}
+
+
+/* Styles for the links in the header navigation */
+.nav-link {
+    @apply text-slate-700 dark:text-slate-300 hover:text-electric-blue dark:hover:text-electric-blue-light transition-all duration-200 px-3 py-2 rounded-md;
+}
+.nav-link.active {
+    @apply text-electric-blue dark:text-electric-blue-light font-semibold;
+     border-bottom-width: 2px;
+     border-bottom-style: solid;
+    @apply border-electric-blue dark:border-gold-custom;
+}
+.dark .nav-link.active {
+     @apply border-gold-custom text-gold-custom-light;
+}
+
+/* Titres de section communs */
+.section-title {
+    @apply text-3xl sm:text-4xl font-bold tracking-tight text-center mb-12 sm:mb-16;
+    @apply text-slate-900 dark:text-white;
+}
+
+/* Styles pour la chronologie (timeline) */
+.timeline-container {
+    @apply relative border-l-2 ml-3 sm:ml-6 pl-8 sm:pl-10 space-y-16 sm:space-y-20;
+    @apply border-slate-300 dark:border-slate-600;
+}
+
+.timeline-item {
+    @apply relative bg-light-contrast/90 dark:bg-slate-800/70 p-4 sm:p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 ease-in-out;
+    @apply hover:-translate-y-1;
+}
+
+.timeline-dot {
+    @apply absolute top-6 sm:top-8 flex items-center justify-center w-5 h-5 sm:w-6 sm:h-6 rounded-full ring-4 sm:ring-8 shadow-md;
+    left: calc(-2rem - 12px);
+    @apply ring-light-contrast dark:ring-near-black; /* Ring color should contrast with the item's BG */
+}
+
+@screen sm {
+    .timeline-dot {
+        left: calc(-2.5rem - 12px);
+    }
+}
+
+.timeline-time {
+    @apply mb-1.5 text-xs sm:text-sm font-medium leading-none text-slate-500 dark:text-slate-400;
+}
+
+.timeline-title {
+    @apply text-xl sm:text-2xl font-semibold mt-1 mb-3;
+    @apply text-slate-800 dark:text-slate-100;
+}
+.timeline-title a {
+    @apply hover:text-electric-blue dark:hover:text-gold-custom transition-colors duration-200;
+}
+
+.timeline-content {
+    @apply prose prose-slate dark:prose-invert max-w-none text-slate-600 dark:text-slate-300 mb-4 sm:mb-5 text-base leading-relaxed;
+}
+.timeline-content p {
+    @apply mb-3;
+}
+
+.timeline-tags {
+    @apply flex flex-wrap gap-2 mt-3;
+}
+.tag {
+    @apply inline-block text-xs sm:text-sm font-semibold px-3 py-1.5 rounded-full transition-all duration-200 ease-in-out;
+    @apply hover:scale-110 hover:shadow-md;
+}
+
+/* Styles for the Socials section - Linktree style */
+.social-link-tree-item {
+    @apply flex items-center w-full p-3 sm:p-4 rounded-lg shadow-md transition-all duration-300 ease-in-out;
+    @apply bg-slate-200/70 dark:bg-slate-700/70; /* Base background for buttons, semi-transparent */
+    @apply text-slate-800 dark:text-slate-100; /* Base text color for buttons */
+    @apply border border-slate-400 dark:border-slate-600;
+}
+
+.social-link-tree-item:hover {
+    @apply shadow-xl transform -translate-y-1 scale-[1.02];
+    /* Mode clair survol */
+    @apply bg-electric-blue text-white border-electric-blue-dark;
+}
+
+.dark .social-link-tree-item:hover {
+    /* Mode sombre survol */
+    @apply bg-gold-custom text-near-black border-gold-custom-dark;
+}
+
+/* Default icon, text, arrow layout */
+.social-link-tree-icon {
+    @apply w-6 h-6 sm:w-7 sm:h-7 mr-3 sm:mr-4 shrink-0;
+}
+
+.social-link-tree-text {
+    @apply flex-grow text-sm sm:text-base font-semibold text-left;
+}
+
+.social-link-tree-arrow {
+    @apply ml-auto text-lg sm:text-xl opacity-50 group-hover:opacity-100 transition-opacity duration-300;
+}
+
+/* Alternating layout for even items */
+.social-link-tree-item:nth-child(even) {
+    /* Reverses the main flex direction: Arrow will be on the left, then text, then icon */
+    /* This is not ideal as the arrow is visually first. Let's adjust children order instead. */
+}
+
+.social-link-tree-item:nth-child(even) .social-link-tree-icon {
+    @apply order-last ml-3 sm:ml-4 mr-0; /* Icon to the right, adjust margin */
+}
+
+.social-link-tree-item:nth-child(even) .social-link-tree-text {
+    @apply order-none text-left; /* Text stays in middle, but now to the left of icon */
+     /* If you want text to align right towards the icon: @apply text-right; */
+}
+
+.social-link-tree-item:nth-child(even) .social-link-tree-arrow {
+    @apply order-first mr-auto ml-0; /* Arrow to the far left */
+}
+
+
+/* Animation d'apparition pour les sections de contenu */
+.content-section {
+    animation: fadeIn 0.6s ease-out forwards;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(25px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.content-section.hidden {
+    display: none !important;
+}
+
+/* Ajustements pour la section Présentation */
+#about img {
+    @apply mb-8 rounded-full transition-all duration-300 ease-in-out;
+    @apply hover:scale-105 hover:shadow-2xl;
+}
+#about h1 {
+    @apply mb-4 text-4xl sm:text-5xl;
+}
+#about p {
+    @apply text-lg sm:text-xl leading-relaxed sm:leading-loose;
+}
