@@ -49,7 +49,7 @@ const flowfieldSketch = (sketch) => {
                 sketch.color(goldCustom[0], goldCustom[1], goldCustom[2], 150)
             ];
             chosenStrokeColor = sketch.color(nearBlack[0], nearBlack[1], nearBlack[2], 50); // Subtle stroke for dark mode
-            mult = 0.02; // Slower/more subtle movement for dark mode
+            mult = 0.031415; // Slower/more subtle movement for dark mode
         } else {
             // Light mode particle colors - can be adjusted
             particleColors = [
@@ -57,7 +57,7 @@ const flowfieldSketch = (sketch) => {
                 sketch.color(electricBlue[0], electricBlue[1], electricBlue[2], 150) // Lighter variant
             ];
             chosenStrokeColor = sketch.color(nearWhite[0], nearWhite[1], nearWhite[2], 50); // Subtle stroke for light mode
-            mult = 0.03; // Slightly faster for light mode
+            mult = 0.01618; // Slightly faster for light mode
         }
         
     }
@@ -69,7 +69,7 @@ const flowfieldSketch = (sketch) => {
         const isDarkMode = document.documentElement.classList.contains('dark');
         let bgColor = isDarkMode ? sketch.color(nearBlack[0], nearBlack[1], nearBlack[2], 25) : sketch.color(240, 240, 240, 25); // Use light-contrast for light mode bg
         sketch.background(bgColor);
-        
+        chosenColor = sketch.random(particleColors);
         sketch.fill(chosenColor);
         sketch.stroke(chosenStrokeColor)
         for (let i = 0; i < points.length; i++) {
@@ -123,7 +123,12 @@ const flowfieldSketch = (sketch) => {
             // Add a small delay to allow the class on <html> to update
             setTimeout(() => {
                 updateColorsBasedOnTheme();
-            }, 10);
+                console.log({
+                    chosenColor,
+                    chosenStrokeColor,
+                });
+                
+            }, 250);
         });
     }
      // Initial color setup based on theme
