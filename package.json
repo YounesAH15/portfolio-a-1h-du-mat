@@ -1,0 +1,25 @@
+{
+  "name": "app",
+  "version": "1.0.0",
+  "description": "Ce template fournit une structure de base pour un portfolio personnel sous forme de Single Page Application (SPA). Il est inspiré par des designs modernes et épurés, utilise [Tailwind CSS](https://tailwindcss.com/) pour le style, et intègre une animation générative avec [P5.js](https://p5js.org/).",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/YounesAH15/portfolio-a-1h-du-mat.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/YounesAH15/portfolio-a-1h-du-mat/issues"
+  },
+  "homepage": "https://github.com/YounesAH15/portfolio-a-1h-du-mat#readme",
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0"
+  }
+}

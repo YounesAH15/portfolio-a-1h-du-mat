@@ -1,33 +1,73 @@
 // js/script.js
 
-document.addEventListener('DOMContentLoaded', function() {
-    // --- Gestion de l'année en cours ---
-    const currentYearElement = document.getElementById('currentYear');
-    if (currentYearElement) {
-        currentYearElement.textContent = new Date().getFullYear();
-    }
+// --- Core Functions ---
 
-    // --- Gestion du mode sombre (Dark/Light Mode) ---
+function updateCurrentYear(element) {
+    if (element) {
+        element.textContent = new Date().getFullYear();
+    }
+}
+
+function applyTheme(isDark, themeToggleDarkIcon, themeToggleLightIcon) {
+    if (isDark) {
+        document.documentElement.classList.add('dark');
+        if (themeToggleDarkIcon) themeToggleDarkIcon.classList.remove('hidden');
+        if (themeToggleLightIcon) themeToggleLightIcon.classList.add('hidden');
+        localStorage.setItem('theme', 'dark');
+    } else {
+        document.documentElement.classList.remove('dark');
+        if (themeToggleDarkIcon) themeToggleDarkIcon.classList.add('hidden');
+        if (themeToggleLightIcon) themeToggleLightIcon.classList.remove('hidden');
+        localStorage.setItem('theme', 'light');
+    }
+}
+
+function updateActiveSection(targetId, contentSections, navLinks) {
+    contentSections.forEach(section => {
+        if (section.id === targetId) {
+            section.classList.remove('hidden');
+            section.classList.add('active-section');
+        } else {
+            section.classList.add('hidden');
+            section.classList.remove('active-section');
+        }
+    });
+
+    navLinks.forEach(link => {
+        const linkTarget = link.dataset.section || (link.getAttribute('href') || '').substring(1);
+        if (linkTarget === targetId) {
+            link.classList.add('active');
+        } else {
+            link.classList.remove('active');
+        }
+    });
+}
+
+function toggleMobileMenu(mobileMenu) {
+    if (mobileMenu) {
+        if (mobileMenu.classList.contains('active-mobile-menu')) {
+            mobileMenu.classList.add('hidden');
+            mobileMenu.classList.remove('active-mobile-menu');
+        } else {
+            mobileMenu.classList.remove('hidden');
+            mobileMenu.classList.add('active-mobile-menu');
+        }
+    }
+}
+
+// --- DOMContentLoaded Event Listener ---
+
+document.addEventListener('DOMContentLoaded', function() {
+    // --- Year ---
+    const currentYearElement = document.getElementById('currentYear');
+    updateCurrentYear(currentYearElement);
+
+    // --- Theme ---
     const themeToggleBtn = document.getElementById('theme-toggle');
     const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
     const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
 
-    function applyTheme(isDark) {
-        if (isDark) {
-            document.documentElement.classList.add('dark');
-            if (themeToggleDarkIcon) themeToggleDarkIcon.classList.remove('hidden');
-            if (themeToggleLightIcon) themeToggleLightIcon.classList.add('hidden');
-            localStorage.setItem('theme', 'dark');
-        } else {
-            document.documentElement.classList.remove('dark');
-            if (themeToggleDarkIcon) themeToggleDarkIcon.classList.add('hidden');
-            if (themeToggleLightIcon) themeToggleLightIcon.classList.remove('hidden');
-            localStorage.setItem('theme', 'light');
-        }
-        // NOTE: The flowfield background sketch (flowfield-background.js) 
-        // will listen for clicks on the theme-toggle button to update its colors.
-    }
-
+    // Set initial theme based on class
     const initialThemeIsDark = document.documentElement.classList.contains('dark');
     if (initialThemeIsDark) {
         if (themeToggleDarkIcon) themeToggleDarkIcon.classList.remove('hidden');
@@ -36,49 +76,24 @@ document.addEventListener('DOMContentLoaded', function() {
         if (themeToggleDarkIcon) themeToggleDarkIcon.classList.add('hidden');
         if (themeToggleLightIcon) themeToggleLightIcon.classList.remove('hidden');
     }
-    
+
     if (themeToggleBtn) {
         themeToggleBtn.addEventListener('click', function() {
-            applyTheme(!document.documentElement.classList.contains('dark'));
+            applyTheme(!document.documentElement.classList.contains('dark'), themeToggleDarkIcon, themeToggleLightIcon);
         });
     }
 
-    // --- Gestion de la navigation SPA ---
+    // --- SPA Navigation ---
     const navLinks = document.querySelectorAll('.nav-link');
     const contentSections = document.querySelectorAll('.content-section');
     const homeLink = document.getElementById('nav-home');
-
-    function updateActiveSection(targetId) {
-        contentSections.forEach(section => {
-            if (section.id === targetId) {
-                section.classList.remove('hidden');
-                section.classList.add('active-section');
-            } else {
-                section.classList.add('hidden');
-                section.classList.remove('active-section');
-            }
-        });
-
-        navLinks.forEach(link => {
-            // Check if the link's data-section matches the targetId OR
-            // if the link's href (after #) matches the targetId (for the "Contactez-moi" button)
-            const linkTarget = link.dataset.section || (link.getAttribute('href') || '').substring(1);
-            if (linkTarget === targetId) {
-                link.classList.add('active');
-            } else {
-                link.classList.remove('active');
-            }
-        });
-        
-
-    }
 
     navLinks.forEach(link => {
         link.addEventListener('click', function(e) {
             e.preventDefault();
             const targetId = this.dataset.section || (this.getAttribute('href') || '').substring(1);
-            if (targetId) { // Ensure targetId is not empty
-                updateActiveSection(targetId);
+            if (targetId) {
+                updateActiveSection(targetId, contentSections, navLinks);
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             }
         });
@@ -87,30 +102,30 @@ document.addEventListener('DOMContentLoaded', function() {
     if (homeLink) {
         homeLink.addEventListener('click', function(e) {
             e.preventDefault();
-            updateActiveSection('about');
+            updateActiveSection('about', contentSections, navLinks);
             window.scrollTo({ top: 0, behavior: 'smooth' });
         });
     }
-    
-    updateActiveSection('about');
 
-    // --- Gestion du Menu Mobile ---
+    updateActiveSection('about', contentSections, navLinks);
+
+    // --- Mobile Menu ---
     const mobileMenuButton = document.getElementById('mobile-menu-button');
     const mobileMenu = document.getElementById('mobile-menu');
 
-    if (mobileMenuButton && mobileMenu) {
+    if (mobileMenuButton) {
         mobileMenuButton.addEventListener('click', function() {
-            if( mobileMenu.classList.contains('active-mobile-menu')) {
-                mobileMenu.classList.add('hidden');
-                mobileMenu.classList.remove('active-mobile-menu');
-            } else {
-                mobileMenu.classList.remove('hidden');
-                mobileMenu.classList.add('active-mobile-menu');
-            }
+            toggleMobileMenu(mobileMenu);
         });
     }
-
-    // --- Fibonacci Animation P5.js (REMOVED) ---
-    // All logic related to the previous p5.js animation (initP5Sketch, etc.) has been removed.
-    // The new flowfield animation is handled in js/flowfield-background.js
 });
+
+// --- Exports for testing ---
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {
+        updateCurrentYear,
+        applyTheme,
+        updateActiveSection,
+        toggleMobileMenu
+    };
+}
